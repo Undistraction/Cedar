@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef name="compc">
+		<attribute name="output.name" />
+		<attribute name="src.dir" />
+		<attribute name="player.version.full" />
+		<attribute name="project.version.full" />
+		<attribute name="locale" default="en_US" />
+		<attribute name="incremental" default="true" />
+
+		<sequential>
+			<echo>[mxmlc] Compiling Library</echo>
+			<!-- Compile Library -->
+			<java jar="${flex.sdk.compc.jar}" dir="${flex.sdk.frameworks}" fork="true" failonerror="true">
+				<arg value="-incremental=@{incremental}"/>
+				<arg value="-static-link-runtime-shared-libraries=true"/>
+				<arg value="-verbose-stacktraces=true"/>
+				<arg value="-headless-server=true"/>
+				<arg value="-target-player=@{player.version.full}" />
+				<!-- Build our SWC with a versioned name. -->
+				<arg value="-output=${output.name}_@{project.version.full}.swc"/>
+				<!-- Path Specific -->
+				
+				<!-- We want all the org package classes in the SWC being built. -->
+				<arg value="-include-sources=@{src.dir}"/>
+				<!-- Include classes from SWCs in this folder, but only the ones we use. -->
+				<!-- <arg value="-library-path+=${lib.loc}" /> -->
+			</java>
+			<echo>[mxmlc] Library Compilation Complete</echo>
+		</sequential>
+	</macrodef>
+</project>

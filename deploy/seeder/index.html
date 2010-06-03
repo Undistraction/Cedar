@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>Cedar - RSL Seeder</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="js/swfobject.js"></script>
+	<script type="text/javascript">
+	
+			//----------------------------------------------------------------------------------
+			//   SWFObject Embed
+			//----------------------------------------------------------------------------------
+	
+     		var flashvars = {
+     			swf_path: "runtime/swf/Seed.swf", 	    						//Path to Flex App which uses an RSL
+     			debug: "true",													//Display debug info and pass it out to the wrapper 'wrapper_update_function_name' is defined. Otherwise hide all UI/Display
+    			use_timeout: "false",  								            //If useTimeout is set to false, we wait until load() is called on the SWF by the wrapper via ExternalInterface
+    			timeout_duration: "1000",    						            //in 1000s of a second / default: 3000 The amount of time to wait before loading if useTimeout is set to true
+    			wrapper_update_function_name: "RSLStatusHandler"				//Name of the js function handling status updates. Leave blank if you don't want the swf to push updates to the wrapper
+			};
+			
+			var params = {
+				allowfullscreen:"true",
+				allownetworking: "all",
+				allowscriptaccess: "always",
+				base: ".",
+				bgcolor: "FFFFFF",
+				devicefont: "false",
+				menu: "false",
+				play: "true",
+				quality:"high",
+				salign:"tl",
+				scale:"showall",
+				seamlesstabbing:"false",
+				swliveconnect:"true",
+				wmode:"window"
+			};
+			
+			var attributes = {
+			  	id: "Cedar",
+			  	name: "Cedar",
+			  	styleclass: "SWFContainer",
+			  	align: "top"
+			};
+    		
+	   		swfobject.embedSWF ( "Cedar.swf", "Cedar_div", "100%", "100%", "10.0.0", "playerProductInstall.swf", flashvars, params, attributes );
+	   		
+	    	//----------------------------------------------------------------------------------
+			//   External Interface Coms
+			//----------------------------------------------------------------------------------
+	    	
+	    	/**
+			 * The Button was clicked so tell the swf to load the RSL SWF
+			 */
+			function loadButtonClickHandler(){
+				thisMovie("Cedar").load();
+			}
+
+			/**
+			 * Status updates from the SWF for help in debugging.
+			 */	
+			function RSLStatusHandler(message){
+				//Implement however you need.
+				//eg. alert(message);
+			}
+			
+			//----------------------------------------------------------------------------------
+			//   Utils
+			//----------------------------------------------------------------------------------
+			
+			/**
+			 * Get a browser safe reference to the embedded SWF.
+			 */
+			function thisMovie(movieName) {
+		        if (navigator.appName.indexOf("Microsoft") != -1) {
+		            return window[movieName];
+		        } else {
+		            return document[movieName];
+		        }
+		    }
+	    
+	    
+	    </script>
+
+	<style>
+		
+		html{
+			height: 100%;
+		}
+		
+		body {
+			padding: 0;
+			margin: 0;
+			border: 0;
+			overflow: hidden;
+			background-color: #777777;;
+		}
+		
+		#swfContainer {
+			top: 20px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			overflow: hidden;
+		}
+		
+	</style>
+</head>
+<body>
+	<div id="loadButtonContainer">
+			<button onclick="loadButtonClickHandler();">Load RSL SWF</button >
+		</div>
+	<div id="swfContainer">
+		<div id="Cedar_div">
+			<p>Alternative content</p>
+		</div>
+	</div>
+</body>
+</html>

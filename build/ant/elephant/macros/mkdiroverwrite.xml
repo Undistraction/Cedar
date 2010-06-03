@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef
+		name="mkdiroverwrite">
+		<attribute name="dir" />
+		<sequential>
+			<delete
+	        	dir="@{dir}"
+	        	failOnError="false"
+	        	includeEmptyDirs="true" />
+	        <mkdir
+	        	dir="@{dir}"/>
+		</sequential>
+	</macrodef>
+</project>

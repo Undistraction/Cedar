@@ -1,0 +1,14 @@
+Icon
+Thumbs.db
+.DS_Store
+
+dist/*
+
+.settings/org.eclipse.core.resources.prefs
+.actionScriptProperties
+.flexProperties
+.flexLibProperties
+.FlexUnitSettings
+.project
+.fxpProperties
+.metadata

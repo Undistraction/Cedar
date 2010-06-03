@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef name="makeandcopyto">
+		<attribute name="output.dir"/>
+		<element name="copydirs"/>
+		<sequential>
+			<mkdiroverwrite
+				dir="@{output.dir}"/>
+	        <copy
+	        	todir="@{output.dir}"
+	        	includeemptydirs="true"
+	        	overwrite="true">
+	            <copydirs/>
+	        </copy>
+		</sequential>
+	</macrodef>
+</project>

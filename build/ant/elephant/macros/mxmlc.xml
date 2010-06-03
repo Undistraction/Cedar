@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef name="mxmlc">
+		<attribute name="swf.framerate" default="34"/>
+		<attribute name="application.file" />
+		<attribute name="output.swf" />
+		<attribute name="player.version.full" />
+		<attribute name="swf.usenetwork" default="true" />
+		<attribute name="swf.static-link-runtime-shared-libraries" default="true" />
+		<attribute name="swf.debug" default="true"/>
+		<attribute name="swf.width"/>
+		<attribute name="swf.height"/>
+		<attribute name="swf.locale" default="en_US"/>
+		<attribute name="swf.background.color" default="0xFFFFFF"/>
+		<attribute name="src.dirs"/>
+		<attribute name="libs.dirs" default=""/>
+		<attribute name="rsls.args" default=""/>
+		<attribute name="external-libs.dirs" default="${flex.sdk.playerglobal.swc}"/>
+		<sequential>
+		    <echo>[mxmlc] Compiling SWF </echo>
+			<echo>@{swf.framerate}</echo>
+			<echo>@{application.file}</echo>
+				<echo>@{output.swf}</echo>
+				<echo>@{player.version.full}</echo>
+				<echo>@{swf.usenetwork}</echo>
+				<echo>@{rsls.args}</echo>
+		    <java jar="${flex.sdk.mxmlc.jar}" dir="${flex.sdk.frameworks}" fork="true" failonerror="true">
+				<!-- Application File -->
+		    	<arg value="@{application.file}"/>
+		    	<arg value="-debug=true"/>
+		    	<arg value="-default-size=@{swf.width},@{swf.height}"/>
+		    	<arg value="-incremental=false"/>
+		    	<arg value="-verbose-stacktraces=true"/>
+		    	<arg value="-headless-server=true"/>
+		    	<arg value="-target-player=@{player.version.full}" />
+		    	<arg value="-default-frame-rate=@{swf.framerate}" />
+		    	<arg value="-default-background-color=@{swf.background.color}"/>
+		    	<arg value="-use-network=@{swf.usenetwork}"/>
+		    	<arg value="-static-link-runtime-shared-libraries=@{swf.static-link-runtime-shared-libraries}" />
+		    	<arg value="-locale=@{swf.locale}"/>
+		    	<!-- Output SWF -->
+		    	<arg value="-output=@{output.swf}"/>
+		    	<!-- Application Specific -->
+		    	<!-- Include classes / assets from these folders, but only classes referenced in the build. -->
+		    	<arg value="-source-path=@{src.dirs}"/>
+		    	<!-- Include classes from SWCs in these folders, but only classes referenced in the build. -->
+		    	<arg value="-library-path+=@{libs.dirs}"/>
+		    	<!-- Compile against classes from these SWCs but don't include them -->
+		    	<arg value="-compiler.external-library-path=@{external-libs.dirs}" />
+		    	<!-- Use classes from these libraries as RSLS -->
+		    	<arg line="@{rsls.args}" />
+			</java>
+		
+		    <echo>[mxmlc] Compiled SWF to @{output.swf}</echo>
+		    
+		</sequential>
+	</macrodef>
+	
+</project>

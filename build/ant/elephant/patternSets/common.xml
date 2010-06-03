@@ -1,0 +1,11 @@
+<project>
+	<patternset id="all.files" includes="*.*"/>
+	<patternset id="all.files.recursive" includes="**/*.*"/>
+	
+	<patternset id="image.files" includes="*.jpg, *.gif, *.png"/>
+	<patternset id="image.files.recursive" includes="**/*.jpg, **/*.gif, **/*.png"/>
+	
+	<patternset id="as.mxml.files" includes="*.as, *.mxml"/>
+	<patternset id="as.mxml.files.recursive" includes="**/*.as, **/*.mxml"/>
+	
+</project>

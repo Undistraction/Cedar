@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	name="Cedar Build File"
+	basedir="."
+	default="echoprojectdetails">
+
+	<!-- File Description -->
+	<description>Build Scripts for Cedar RSL Seeder</description>
+	
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<!--  Imports                           							                                                               -->
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	
+	<!-- Properties -->
+	<!-- Important - Import your custom properties before the default imports -->
+	<property file="./build/ant/properties/project-details.properties"/>
+	<property file="./build/ant/properties/project-setup.properties"/>
+	<property file="./build/ant/properties/project-structure.properties" />
+	<property file="./build/ant/properties/seed.properties" />
+	<property file="./build/ant/properties/seeder.properties" />
+	<property file="./build/ant/properties/dist.properties" />
+	<!-- Default Properties -->
+	<import file="./build/ant/elephant/misc/defaultproperties.xml" />
+	
+	<!-- Macrodefs -->
+	<import file="./build/ant/elephant/macros/echoProjectDetails.xml"/>
+	<import file="./build/ant/elephant/macros/asdocs.xml"/>
+	<import file="./build/ant/elephant/macros/runhtml.xml"/>
+	<import file="./build/ant/elephant/macros/runswf.xml"/>
+	<import file="./build/ant/elephant/macros/compc.xml"/>
+	<import file="./build/ant/elephant/macros/mxmlc.xml"/>
+	<import file="./build/ant/elephant/macros/wrapper.xml"/>
+	<import file="./build/ant/elephant/macros/mkdiroverwrite.xml"/>
+	<import file="./build/ant/elephant/macros/makeandcopyto.xml"/>
+	
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<!--  Taskdefs                           							                                                               -->
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+		
+	<!-- Ant Contrib -->
+	<!--<taskdef
+		resource="net/sf/antcontrib/antcontrib.properties"
+	  	classpath="${ant-contrib.jar}"/>-->
+    	
+    <!-- FlexTasks -->
+    <!--<taskdef
+    	resource="flexTasks.tasks"
+		classpath="${flex.sdk.flextasks.jar}"/>-->
+	
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<!--  Setup                           							                                                               -->
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	
+	<!-- Set up prefix for accessing Environmental Variables -->
+	<property environment="env"/>
+    
+    <!-- Setup a timestamp -->
+    <tstamp>
+        <format
+        	property="project.timestamp"
+			pattern="${setup.timestamp.pattern}" />
+    </tstamp>
+	
+	<!-- Setup a build number (Using the build.number file to store and increment it) -->
+    <buildnumber
+    	id="project.build.number"
+    	file="${build.dir}/build.number"/>
+	
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<!--  Main Targets                           							                                                           -->
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	
+	<target
+    	name="(all)"
+    	depends="echoprojectdetails,
+    			 (seed),
+ 				 (seeder),
+    			 (dist)"/>
+    			 
+	<target
+    	name="(seed)"
+    	depends="echoprojectdetails,
+    			 (seed)mxmlc,
+				 (seed)runswf"/>
+	
+	<target
+    	name="(seeder)"
+		depends="echoprojectdetails,
+				 (seeder)copyassets,
+				 (seeder)wrapper,
+				 (seeder)mxmlc,
+				 (seeder)runhtml"/>
+				 
+	<target
+    	name="(dist)"
+    	depends="echoprojectdetails,
+    			 (dist)compc,
+ 				 (dist)asdocs,
+    			 (dist)copyassets"/>
+	
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<!--  Seed                                              							                                               -->
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	 
+	<target
+		name="(seed)mxmlc">
+		<!-- Src paths -->
+		<path
+			id="srcdirs">
+			<pathelement location="${src.dir}"/>
+			<pathelement location="${assets.dir}"/>
+		</path>
+		<property
+			name="src.dirs"
+			refid="srcdirs"/>
+		<!-- Lib paths -->
+		<path
+			id="libsdirs">
+			<pathelement location="${libs.dir}"/>
+		</path>
+		<property
+			name="libs.dirs"
+			refid="libsdirs"/>
+		<!-- static-link-runtime-shared-libraries must be false -->
+		<mxmlc
+			application.file="${(seed)application.file}"
+			output.swf="${[output](seed)swf}"
+			player.version.full="${player.version.full}"
+			swf.framerate="${[output](seed)swf.framerate}"
+			swf.debug="${[output](seed)swf.debug}"
+			swf.width="${[output](seed)swf.width}"
+			swf.height="${[output](seed)swf.height}"
+			swf.static-link-runtime-shared-libraries="false"
+			src.dirs="${src.dirs}"
+			libs.dirs="${libs.dirs}"
+			rsls.args="${[output](seed)rsls.args}" />
+	</target>
+	
+	<target
+		name="(seed)runswf">
+		<runswf
+			url="${[output](seed)dir}/${[output](seed)swf.name}.swf"/>
+	</target>
+	
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<!--  Seeder                                            							                                               -->
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	
+	<target
+    	name="(seeder)copyassets">
+	 	<fileset
+	 		id="assets.runtime.dir"
+	 		dir="${assets.runtime.dir}"/>
+        <makeandcopyto
+    		output.dir="${[output](seeder)assets.runtime.dir}">
+        	<copydirs>
+        		<fileset refid="assets.runtime.dir"/>
+        	</copydirs>
+        </makeandcopyto>
+    </target>
+    		
+	<target name="(seeder)wrapper">
+		<wrapper
+			swf.width="${[output](seeder)wrapper.swf.width}"
+			swf.height="${[output](seeder)wrapper.swf.height}"
+			wrapper.title="${project.name.full}"
+			wrapper.express-install.name="${wrapper.express-install.name}"
+			wrapper.swf.background-color="${wrapper.swf.background-color}"
+			wrapper.player.version="${player.version.full}"
+			output.wrapper.dir="${[output](seeder)dir}"
+			output.wrapper.html="${[output](seeder)wrapper.html}"
+			output.swf.name="${[output](seeder)swf.name}"
+			wrapper.template.dir="${wrapper.template.dir}"
+			wrapper.template.html="${[output](seeder)wrapper.template.html}"
+			wrapper.embed-params.allowfullscreen="${wrapper.embed-params.allowfullscreen}"
+			wrapper.embed-params.allownetworking="${wrapper.embed-params.allownetworking}"
+			wrapper.embed-params.allowscriptaccess="${wrapper.embed-params.allowscriptaccess}"
+			wrapper.embed-params.basedir="${wrapper.embed-params.basedir}"
+			wrapper.embed-params.bgcolor="${wrapper.embed-params.bgcolor}"
+			wrapper.embed-params.devicefont="${wrapper.embed-params.devicefont}"
+			wrapper.embed-params.menu="${wrapper.embed-params.menu}"
+			wrapper.embed-params.play="${wrapper.embed-params.play}"
+			wrapper.embed-params.quality="${wrapper.embed-params.quality}"
+			wrapper.embed-params.salign="${wrapper.embed-params.salign}"
+			wrapper.embed-params.scale="${wrapper.embed-params.scale}"
+			wrapper.embed-params.seamless-tabbing="${wrapper.embed-params.seamless-tabbing}"
+			wrapper.embed-params.sw-live-connect="${wrapper.embed-params.sw-live-connect}"
+			wrapper.embed-params.wmode="${wrapper.embed-params.wmode}"
+			wrapper.attributes.style-class="${wrapper.attributes.style-class}"
+			wrapper.attributes.align="${wrapper.attributes.align}" />
+	</target>	
+	
+	<target
+		name="(seeder)mxmlc">
+		
+		<!-- Src paths -->
+		<path
+			id="srcdirs">
+			<pathelement location="${src.dir}"/>
+			<pathelement location="${assets.dir}"/>
+		</path>
+		<property
+			name="src.dirs"
+			refid="srcdirs"/>
+		
+		<!-- Lib paths -->
+		<path
+			id="libsdirs">
+			<pathelement location="${libs.dir}"/>
+		</path>
+		<property
+			name="libs.dirs"
+			refid="libsdirs"/>
+		
+		<mxmlc
+			application.file="${application.file}"
+			output.swf="${[output](seeder)swf}"
+			player.version.full="${player.version.full}"
+			swf.framerate="${[output](seeder)swf.framerate}"
+			swf.debug="${[output](seeder)swf.debug}"
+			swf.width="${[output](seeder)swf.width}"
+			swf.height="${[output](seeder)swf.height}"
+			swf.static-link-runtime-shared-libraries="true"
+			src.dirs="${src.dirs}"
+			libs.dirs="${libs.dirs}"/>
+	</target>
+	
+	<target
+		name="(seeder)runhtml">
+		<runhtml
+			url="${[output](seeder)wrapper.url}"
+			browser="${app.browser.firefox}"/>
+	</target>
+	
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<!--  Dist                                                							                                               -->
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	
+	<target
+		name="(dist)asdocs"
+		description="Create Project Documentation">
+		<asdocs
+			asdocs.executable="${flex.sdk.asdocs}"
+			config.xml="${flex.sdk.config.xml}"
+			asdocs.output.dir="${asdocs.dir}"
+			asdocs.footer="${asdocs.footer}"
+			asdocs.main.title="${asdocs.main.title}"
+			asdocs.window.title="${asdocs.window.title}"/>
+	</target>
+	
+	<target
+		name="(dist)copyassets">
+		<echo>[(dist)copyassets] Copying Resources To Distribution Directory...</echo>
+       	<mkdiroverwrite
+			dir="${[output](dist)dir}"/>
+		<!-- Copy Binaries -->
+        <copy
+        	todir="${[output](dist)bin.dir}"
+        	includeemptydirs="true"
+        	overwrite="true">
+            <fileset 
+            	dir="${bin.dir}">
+            	<patternset>
+            		<include name="**/*.swc"/>
+            	</patternset>
+            </fileset>
+        </copy>
+         <!-- Copy Docs -->
+        <copy
+        	todir="${[output](dist)docs.dir}"
+        	includeemptydirs="true"
+        	overwrite="true">
+			<fileset 
+				dir="${build.docs.dir}">
+				<patternset>
+					<include name="**/*.pdf" />
+				</patternset>
+			</fileset>
+        </copy>
+		<!-- Copy ASDocs -->
+		<copy
+        	todir="${[output](dist)asdocs.dir}"
+        	includeemptydirs="true"
+        	overwrite="false">
+			<fileset 
+				dir="${asdocs.dir}"/>
+        </copy>
+        <!-- Copy Licence -->
+		<copy
+        	todir="${[output](dist)dir}"
+        	includeemptydirs="true"
+        	overwrite="true">
+			<fileset 
+				dir="${build.docs.dir}">
+				<patternset>
+					<include name="**/LICENCE.txt" />
+				</patternset>
+			</fileset>
+        </copy>
+       
+		<!-- Copy Source -->
+		<copy
+        	todir="${[output](dist)src.dir}"
+        	includeemptydirs="true"
+        	overwrite="true">
+			<fileset
+				dir="${src.dir}"/>
+        </copy>
+		<!-- Copy Seeder -->
+		<copy
+        	todir="${[output](dist)deploy.dir}"
+        	includeemptydirs="true"
+        	overwrite="true">
+			<fileset
+				dir="${[output](seeder)dir}"/>
+        </copy>
+	
+	   <echo>[(dist)copyassets] Copyied Resources To Distribution Directory...</echo>
+	</target>
+	
+	<target
+		name="(dist)compc">
+		<compc
+			output.name="${output.name}"
+			src.dir="${src.dir}"
+			player.version.full="${player.version.full}"
+			project.version.full="${project.version.full}" />
+	</target>
+	
+	<target
+		name="(dist)zip">
+		<zip 
+	    	destfile="${[output](dist)zip}"
+	    	whenempty="fail">
+	    	<fileset
+	    		dir="${[output](dist)dir}"/>
+	    </zip>
+	</target>
+	
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<!--  Other Project Specific Targets                              			                                                       -->
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	
+	<target
+		name="clean">
+		<delete
+			dir="${bin.dir}"/>
+		<delete
+			dir="${[output](dist)dir}"/>
+		<delete
+			dir="${deploy.dir}"/>
+	</target>
+	
+	<target name="usage">
+	    <echo message="---------------------------------------------------------------"/>
+	    <echo message="${project.name.full}"/>
+	    <echo message="---------------------------------------------------------------"/>
+	    <echo message=" "/>
+	    <echo message="Main Targets:"/>
+	    <echo message=" "/>
+	    <echo message="seed                --&gt; Compiles the Seed SWF and launches it with Flash Player"/>
+	    <echo message="seeder              --&gt; Compiles the Seeder, Builds its wrapper and launches it in the Browser"/>
+		<echo message="dist                --&gt; Compiles src to a swc, and creates a distribution containing source, docs and examples"/>
+		<echo message=" "/>
+	    <echo message="Secondary Targets:"/>
+	    <echo message=" "/>
+		<echo message="(dist)zip           --&gt; Zips the distribution"/>
+		<echo message="(dist)copyassets    --&gt; Copies all necessary files to the distribution"/>
+	    <echo message="clean               --&gt; Deletes ANT-generated directories"/>
+	    <echo message=" "/>
+	 </target>
+					
+	<target
+		name="echoprojectdetails">
+		<echoprojectdetails
+			project.name="${project.name.full}"
+			project.version="${project.version.full}"
+			project.timestamp="${project.timestamp}"
+			project.build.number="${project.build.number}"
+			project.year="${project.year}"
+			project.owner="${project.owner}"
+			project.author="${project.author}"
+			project.author.email="${project.author.email}"
+			project.author.URL="${project.author.URL}" />
+	</target>
+	
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+	<!--  Generic Targets                           							                                                       -->
+	<!-- ––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+
+</project>

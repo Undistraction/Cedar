@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	
+	<import
+		file="../patternSets/common.xml"/>
+	<property
+	    	file="build/ant/properties/regexp.properties"
+	    	description="Properities for builds" />
+	
+	<macrodef name="striptrace">
+		<attribute name="source.dir" />
+	    <attribute name="temporary.dir" />   
+		<sequential>
+			<echo>Creating temporary Directory: @{temporary}</echo>
+			<mkdir dir="@{temporary.dir}"/>
+			<echo>Copying files from @{source} to @{temporary}</echo>
+			<copy todir="@{temporary.dir}">
+				<fileset dir="@{source.dir}"/>
+			</copy>
+			<!-- Strip trace statements -->
+			<replaceregexp match="${regexp.trace}"
+						   replace=""
+						   flags="gs">
+				<fileset dir="@{temporary}">
+					<patternsetref
+						id="as.mxml"/>
+				</fileset>
+			</replaceregexp>
+		    <echo>Stripped all trace statements from source at: @{temporary}</echo>
+		</sequential>
+	
+	</macrodef>
+	
+</project>

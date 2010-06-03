@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef name="runhtml">
+			<attribute name="url" />
+			<attribute name="browser" default="${app.browser.chrome}" />
+			<sequential>
+				<echo>[runhtml] Launching html application...</echo>
+				<exec
+					executable="open"
+					vmlauncher="true"
+					spawn="false"
+					failonerror="true">
+					<arg line="-a '@{browser}'" />
+					<arg line="@{url}" />
+				</exec>
+				<echo>[runhtml] Launched html application</echo>
+			</sequential>
+	</macrodef>
+</project>

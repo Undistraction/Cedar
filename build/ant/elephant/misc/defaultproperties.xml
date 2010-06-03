@@ -1,0 +1,16 @@
+<project>
+
+	<!-- Default Properties -->
+	<property file="./build/ant/elephant/properties/build-setup.properties"/>
+	<property file="./build/ant/elephant/properties/setup.properties"/>
+	<property file="./build/ant/elephant/properties/applications.properties"/>
+	<property file="./build/ant/elephant/properties/libraries.properties"/>
+	<property file="./build/ant/elephant/properties/flex.properties"/>
+	<property file="./build/ant/elephant/properties/project-setup.properties"/>
+	<property file="./build/ant/elephant/properties/project-details.properties"/>
+	<property file="./build/ant/elephant/properties/html-wrapper.properties"/>
+	<property file="./build/ant/elephant/properties/asdocs.properties"/>
+	<property file="./build/ant/elephant/properties/compc.properties"/>
+	<property file="./build/ant/elephant/properties/swf.properties"/>
+	
+</project>

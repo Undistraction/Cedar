@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<title>@title@</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="js/swfobject.js"></script>
+	<script type="text/javascript">
+	
+			//----------------------------------------------------------------------------------
+			//   SWFObject Embed
+			//----------------------------------------------------------------------------------
+	
+     		var flashvars = {
+     			swf_path: "runtime/swf/Seed.swf", 	    						//Path to Flex App which uses an RSL
+     			debug: "true",													//Display debug info and pass it out to the wrapper 'wrapper_update_function_name' is defined. Otherwise hide all UI/Display
+    			use_timeout: "true",  								            //If useTimeout is set to false, we wait until load() is called on the SWF by the wrapper via ExternalInterface
+    			timeout_duration: "1000",    						            //(1000s of a second) default: 3000
+    			wrapper_update_function_name: "RSLStatusHandler"				//Name of the js function handling status updates. Leave blank if you don't want the swf to push updates to the wrapper
+			};
+			
+			var params = {
+				allowfullscreen:"@allowfullscreen@",
+				allownetworking: "@allownetworking@",
+				allowscriptaccess: "@allowscriptaccess@",
+				base: "@base@",
+				bgcolor: "@bgcolor@",
+				devicefont: "@devicefont@",
+				menu: "@menu@",
+				play: "@play@",
+				quality:"@quality@",
+				salign:"@salign@",
+				scale:"@scale@",
+				seamlesstabbing:"@seamlesstabbing@",
+				swliveconnect:"@swliveconnect@",
+				wmode:"@wmode@"
+			};
+			
+			var attributes = {
+			  	id: "@name@",
+			  	name: "@name@",
+			  	styleclass: "@styleclass@",
+			  	align: "@align@"
+			};
+    		
+	   		swfobject.embedSWF ( "@swf@", "@name@_div", "@width@", "@height@", "@version@", "@express-install@", flashvars, params, attributes );
+	   		
+	    	//----------------------------------------------------------------------------------
+			//   External Interface Coms
+			//----------------------------------------------------------------------------------
+	    	
+	    	/**
+			 * The Button was clicked so tell the swf to load the RSL SWF
+			 */
+			function loadButtonClickHandler(){
+				thisMovie("@name@").load();
+			}
+
+			/**
+			 * Status updates from the SWF for help in debugging.
+			 */	
+			function RSLStatusHandler(message){
+				//Implement however you need.
+				//eg. alert(message);
+			}
+			
+			//----------------------------------------------------------------------------------
+			//   Utils
+			//----------------------------------------------------------------------------------
+			
+			/**
+			 * Get a browser safe reference to the embedded SWF.
+			 */
+			function thisMovie(movieName) {
+		        if (navigator.appName.indexOf("Microsoft") != -1) {
+		            return window[movieName];
+		        } else {
+		            return document[movieName];
+		        }
+		    }
+	    
+	    
+	    </script>
+
+	<style>
+		
+		html{
+			height: 100%;
+		}
+		
+		body {
+			padding: 0;
+			margin: 0;
+			border: 0;
+			overflow: hidden;
+			background-color: #@htmlbgcolor@;
+		}
+		
+		#swfContainer {
+			top: 20px;
+			left: 0px;
+			width: @width@;
+			height: @height@;
+			position: absolute;
+			overflow: hidden;
+		}
+		
+	</style>
+</head>
+<body>
+	<div id="loadButtonContainer">
+			<button onclick="loadButtonClickHandler();">Load RSL SWF</button >
+		</div>
+	<div id="swfContainer">
+		<div id="@name@_div">
+			<p>Alternative content</p>
+		</div>
+	</div>
+</body>
+</html>

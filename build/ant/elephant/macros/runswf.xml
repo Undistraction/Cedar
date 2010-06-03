@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef name="runswf">
+			<attribute name="url" />
+			<attribute name="player" default="${app.flash.player.10}" />
+			<sequential>
+				<echo>[runswf] Launching swf...</echo>
+				<exec
+					executable="open"
+					vmlauncher="true"
+					spawn="false"
+					failonerror="true">
+					<arg line="-a '@{player}'" />
+					<arg line="@{url}" />
+				</exec>
+				<echo>[runswf] Launched swf</echo>
+			</sequential>
+	</macrodef>
+</project>

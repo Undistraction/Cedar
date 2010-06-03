@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef
+		name="asdocs">
+		<attribute name="asdocs.executable"/>
+		<attribute name="config.xml"/>
+		<attribute name="asdocs.output.dir"/>
+		<attribute name="asdocs.footer"/>
+		<attribute name="asdocs.main.title"/>
+		<attribute name="asdocs.window.title"/>
+		<sequential>
+			<echo>[asdocs] Compiling ASDocs...</echo>
+		    <delete
+		    	dir="@{asdocs.output.dir}" 
+		        failOnError="false"
+		        includeEmptyDirs="true" />
+		    <mkdir
+		    	dir="@{asdocs.output.dir}" />
+		    <echo></echo>
+		    <exec
+		    	executable="@{asdocs.executable}"
+		    	failOnError="true">
+			        <arg line="-load-config @{config.xml}" />
+		    		<!-- Output -->
+		    		<arg line="-output @{asdocs.output.dir}"/>
+		    		<!-- Folders containing source code needed for compilation -->
+			    	<arg line="-source-path ${src.dir}" />
+		    		<!--Libraries needed for compilation but excluded from generated docs -->
+					<arg line="-external-library-path ${flex.sdk.playerglobal.swc}" />
+					<arg line="-external-library-path ${libs.dir}" />
+			    	<!-- Folders containing source code to document -->
+					<arg line="-doc-sources ${src.dir}" />
+			    	<!-- Document Customisation -->
+		    		<arg line="-main-title '@{asdocs.main.title}'" />
+					<arg line="-window-title '@{asdocs.window.title}'" />
+			    	<arg line="-footer '@{asdocs.footer}'" />
+		    </exec>
+		    <echo>[asdocs] Compiled ASDocs Successfully</echo>
+		</sequential>
+	</macrodef>
+</project>

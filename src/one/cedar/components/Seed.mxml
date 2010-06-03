@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright (c) 2009 the original author or authors
+
+ Permission is hereby granted to use, modify, and distribute this file
+ in accordance with the terms of the license agreement accompanying it.
+-->
+
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   applicationComplete="applicationCompleteHandler()"
+			   preloader="one.cedar.components.SeedPreloader"
+			   backgroundColor="0x666666">
+
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+
+	<fx:Script>
+		<![CDATA[
+			private function applicationCompleteHandler():void
+			{
+				Security.allowDomain("*");
+				stage.scaleMode = StageScaleMode.NO_SCALE;
+				stage.align = StageAlign.TOP_LEFT;
+			}
+		]]>
+	</fx:Script>
+</s:Application>

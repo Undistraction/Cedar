@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef
+		name="userconfirm">
+		<attribute name="choose.message"/>
+		<attribute name="fail.message"/>
+		<sequential>
+	        <input
+	            message="@{choose.message}"
+	            validargs="Yes,No"
+	        	defaultvalue="No"
+	            addproperty="confirm"/>
+		        <condition property="do.abort">
+		            <equals arg1="No" arg2="${confirm}"/>
+		        </condition>
+				<echo>CONFIRMED ${confirm}</echo>
+	       		<fail if="do.abort">@fail.message</fail>
+    	</sequential>
+	</macrodef>
+
+</project>

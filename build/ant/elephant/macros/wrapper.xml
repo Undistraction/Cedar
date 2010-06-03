@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef name="wrapper">
+		<attribute name="swf.width" default="800"/>
+		<attribute name="swf.height" default="600"/>
+		<attribute name="wrapper.title" />
+		<attribute name="wrapper.player.version"/>
+		<attribute name="output.swf.name" />
+		<attribute name="output.wrapper.dir" />
+		<attribute name="output.wrapper.html" />
+		<attribute name="wrapper.template.dir" />
+		<attribute name="wrapper.template.html" />
+		<attribute name="wrapper.express-install.name" />
+		<attribute name="wrapper.swf.background-color" default="#FFFFFF"/>
+		<!-- Embed Params -->
+		<attribute name="wrapper.embed-params.allowfullscreen" default="true"/>
+		<attribute name="wrapper.embed-params.allownetworking" default="true"/>
+		<attribute name="wrapper.embed-params.allowscriptaccess" default="true"/>
+		<attribute name="wrapper.embed-params.basedir" default="."/>
+		<attribute name="wrapper.embed-params.bgcolor" default="#FFFFFF"/>
+		<attribute name="wrapper.embed-params.devicefont" default="false"/>
+		<attribute name="wrapper.embed-params.menu" default="false"/>
+		<attribute name="wrapper.embed-params.play" default="true"/>
+		<attribute name="wrapper.embed-params.quality" default="high"/>
+		<attribute name="wrapper.embed-params.salign" default="tl"/>
+		<attribute name="wrapper.embed-params.scale" default="showall"/>
+		<attribute name="wrapper.embed-params.seamless-tabbing" default="false"/>
+		<attribute name="wrapper.embed-params.sw-live-connect" default="true"/>
+		<attribute name="wrapper.embed-params.wmode" default="window"/>
+		<attribute name="wrapper.attributes.style-class" default="SWFContainer"/>
+		<attribute name="wrapper.attributes.align" default="top"/>
+		
+		<sequential>
+	        <echo>Building Custom Wrapper</echo>
+			<copy todir="@{output.wrapper.dir}">
+				<fileset dir="@{wrapper.template.dir}">
+					<exclude name="**/@{wrapper.template.html}" />
+				</fileset>
+			</copy>
+	        <copy file="@{wrapper.template.dir}/@{wrapper.template.html}"
+	        	tofile="@{output.wrapper.dir}/@{output.wrapper.html}"
+	        	overwrite="true">
+	            <filterchain>
+	                <replacetokens>
+	                	<token key="title" value="@{wrapper.title}"/>
+	                    <token key="version" value="@{wrapper.player.version}"/>
+	                    <token key="width" value="@{swf.width}"/>
+	                    <token key="height" value="@{swf.height}"/>
+	                    <token key="swf" value="@{output.swf.name}.swf"/>
+	                	<token key="name" value="@{output.swf.name}"/>
+	                	<token key="express-install" value="@{wrapper.express-install.name}.swf"/>
+	                	<token key="htmlbgcolor" value="@{wrapper.swf.background-color}" />
+	            		<!-- Embed Params -->
+	                	<token key="allowfullscreen" value="@{wrapper.embed-params.allowfullscreen}"/>
+	                	<token key="allownetworking" value="@{wrapper.embed-params.allownetworking}"/>
+	                	<token key="allowscriptaccess" value="@{wrapper.embed-params.allowscriptaccess}"/>
+	                	<token key="base" value="@{wrapper.embed-params.basedir}" />
+	                	<token key="bgcolor" value="@{wrapper.embed-params.bgcolor}" />
+	                	<token key="devicefont" value="@{wrapper.embed-params.devicefont}" />
+	                	<token key="menu" value="@{wrapper.embed-params.menu}" />
+	                	<token key="play" value="@{wrapper.embed-params.play}" />
+	                	<token key="quality" value="@{wrapper.embed-params.quality}" />
+	                	<token key="salign" value="@{wrapper.embed-params.salign}" />
+	                	<token key="scale" value="@{wrapper.embed-params.scale}" />
+	                	<token key="seamlesstabbing" value="@{wrapper.embed-params.seamless-tabbing}" />
+	                	<token key="swliveconnect" value="@{wrapper.embed-params.sw-live-connect}" />
+	                	<token key="wmode" value="@{wrapper.embed-params.wmode}" />
+	                	<!-- Attributes -->
+	                	<token key="styleclass"  value="@{wrapper.attributes.style-class}" />
+	                	<token key="align"  value="@{wrapper.attributes.align}" />
+	                </replacetokens>
+	            </filterchain>
+	        </copy>
+	        <echo>Built Custom Wrapper</echo>
+		</sequential>
+    </macrodef>
+</project>

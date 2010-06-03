@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<macrodef name="echoprojectdetails">
+			<attribute name="project.name"/>
+			<attribute name="project.version"/>
+			<attribute name="project.timestamp"/>
+			<attribute name="project.build.number"/>
+			<attribute name="project.year"/>
+			<attribute name="project.owner" />
+			<attribute name="project.author" />
+			<attribute name="project.author.email" />
+			<attribute name="project.author.URL" />
+			<sequential>
+				<echo message="=======================================================" />
+				<echo message="@{project.name} v@{project.version}"/>
+				<echo message="@{build.type} Build" />
+				<echo message="@{project.timestamp}"/>
+				<echo message="Build Number: @{project.build.number}"/>
+				<echo message="${os.name} ${os.version}" />
+				<echo message="(c) @{project.year} @{project.owner}" />
+				<echo message="-------------------------------------------------------" />
+				<echo message="Author: @{project.author}" />
+				<echo message="@{project.author.email}" />
+				<echo message="@{project.author.URL}" />
+				<echo message="=======================================================" />
+			</sequential>
+	</macrodef>
+</project>
